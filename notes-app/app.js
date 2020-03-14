@@ -9,5 +9,8 @@
  *  4. From app.js, load in and call the function printing message to console
  */
 
-const getNotes = require('./notes');
-console.log(getNotes());
+// const getNotes = require('./notes');
+// console.log(getNotes());
+
+const validator = require('validator');
+console.log(validator.isEmail('momensherif.2019@gmail.com'));
