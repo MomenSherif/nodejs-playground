@@ -25,7 +25,7 @@ yargs.command({
       type: 'string'
     }
   },
-  handler: function({ title, body }) {
+  handler({ title, body }) {
     const isNoteAdded = addNote(title, body);
     isNoteAdded
       ? console.log(success('Note Added Successfully'))
@@ -44,7 +44,7 @@ yargs.command({
       type: 'string'
     }
   },
-  handler: function({ title }) {
+  handler({ title }) {
     const isRemoved = removeNote(title);
     isRemoved
       ? console.log(success('Note Removed Successfully'))
@@ -56,7 +56,7 @@ yargs.command({
 yargs.command({
   command: 'read',
   describe: 'Read a note',
-  handler: function() {
+  handler() {
     console.log(chalk.green('Reading a note...'));
   }
 });
@@ -65,7 +65,7 @@ yargs.command({
 yargs.command({
   command: 'list',
   describe: 'Listing your notes',
-  handler: function() {
+  handler() {
     console.log(chalk.keyword('orange')('Listing notes...'));
   }
 });
