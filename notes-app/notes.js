@@ -1,8 +1,6 @@
 const fs = require('fs');
 
-const getNotes = () => {
-  return 'Your notes...';
-};
+const getNotes = () => loadNotes();
 
 const addNote = (title, body) => {
   const notes = loadNotes();

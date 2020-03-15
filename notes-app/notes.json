@@ -1,1 +1,5 @@
-[]
+[
+  { "title": "note title", "body": "note body" },
+  { "title": "note title 2", "body": "note body" },
+  { "title": "note title 3", "body": "note body" }
+]

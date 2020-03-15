@@ -66,7 +66,9 @@ yargs.command({
   command: 'list',
   describe: 'Listing your notes',
   handler() {
-    console.log(chalk.keyword('orange')('Listing notes...'));
+    const notes = getNotes();
+    console.log(chalk.yellow('Your notes:'));
+    notes.forEach(({ title }) => console.log(chalk.blue(title)));
   }
 });
 
