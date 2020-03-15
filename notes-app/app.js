@@ -1,29 +1,86 @@
-// const sum = require('./utils');
-// console.log(sum(3, 6));
-
-/**
- * Challenge: Define and use a function in a new file
- *  1. Create new file called notes.js
- *  2. Create getNotes function that returns "Your notes..."
- *  3. Export getNotes function
- *  4. From app.js, load in and call the function printing message to console
- */
-
-// const getNotes = require('./notes');
-// console.log(getNotes());
-
-// const validator = require('validator');
-// console.log(validator.isEmail('momensherif.2019@gmail.com'));
-
-/**
- * challenge: Use the chalk library in your project
- *  1. Install chalk
- *  2. Load chalk into app.js
- *  3. Use it to print the string "Success!" to the console in green
- *  Bonus: Use docs to mess around with other styles. Make text bold and inversed
- */
-
 const chalk = require('chalk');
+const yargs = require('yargs');
+const { getNotes, getNote, addNote, removeNote } = require('./notes');
 
-console.log(chalk.green('Success!'));
-console.log(chalk.keyword('orange').bold('Success!'));
+const error = chalk.red;
+const success = chalk.green;
+
+// Customize yargs version
+yargs.version('1.1.0');
+
+// Create add command
+yargs.command({
+  command: 'add',
+  describe: 'Add a note',
+  // command options --option="...."
+  builder: {
+    title: {
+      describe: 'Note Title',
+      demandOption: true,
+      type: 'string'
+    },
+    body: {
+      describe: 'Note Body Content',
+      demandOption: true,
+      type: 'string'
+    }
+  },
+  handler({ title, body }) {
+    const isNoteAdded = addNote(title, body);
+    isNoteAdded
+      ? console.log(success('Note Added Successfully'))
+      : console.log(error('Note Title Taken!'));
+  }
+});
+
+// Create remove command
+yargs.command({
+  command: 'remove',
+  describe: 'Remove a note',
+  builder: {
+    title: {
+      describe: 'Note title',
+      demandOption: true,
+      type: 'string'
+    }
+  },
+  handler({ title }) {
+    const isRemoved = removeNote(title);
+    isRemoved
+      ? console.log(success('Note Removed Successfully'))
+      : console.log(error('No Note Found!'));
+  }
+});
+
+// Create read command
+yargs.command({
+  command: 'read',
+  describe: 'Read a note',
+  builder: {
+    title: {
+      describe: 'Note title',
+      demandOption: true,
+      type: 'string'
+    }
+  },
+  handler({ title }) {
+    const note = getNote(title);
+    note
+      ? console.log(`${chalk.keyword('orange')(note.title)}\n${note.body}`)
+      : console.log(error('No Note Found!'));
+  }
+});
+
+// Create list command
+yargs.command({
+  command: 'list',
+  describe: 'Listing your notes',
+  handler() {
+    const notes = getNotes();
+    console.log(chalk.yellow('Your notes:'));
+    notes.forEach(({ title }) => console.log(chalk.blue(title)));
+  }
+});
+
+// parsing arguments
+yargs.parse();
