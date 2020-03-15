@@ -2,11 +2,16 @@ const fs = require('fs');
 
 const getNotes = () => loadNotes();
 
+const getNote = title => {
+  const notes = loadNotes();
+  return notes.find(note => note.title === title);
+};
+
 const addNote = (title, body) => {
   const notes = loadNotes();
-  const duplicateNotes = notes.filter(note => note.title === title);
+  const hasDuplicate = notes.find(note => note.title === title);
 
-  if (duplicateNotes.length > 0) return false;
+  if (hasDuplicate) return false;
 
   notes.push({ title, body });
   saveNotes(notes);
@@ -39,6 +44,7 @@ const loadNotes = () => {
 
 module.exports = {
   getNotes,
+  getNote,
   addNote,
   removeNote
 };

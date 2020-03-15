@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 const yargs = require('yargs');
-const { getNotes, addNote, removeNote } = require('./notes');
+const { getNotes, getNote, addNote, removeNote } = require('./notes');
 
 const error = chalk.red;
 const success = chalk.green;
@@ -56,8 +56,18 @@ yargs.command({
 yargs.command({
   command: 'read',
   describe: 'Read a note',
-  handler() {
-    console.log(chalk.green('Reading a note...'));
+  builder: {
+    title: {
+      describe: 'Note title',
+      demandOption: true,
+      type: 'string'
+    }
+  },
+  handler({ title }) {
+    const note = getNote(title);
+    note
+      ? console.log(`${chalk.keyword('orange')(note.title)}\n${note.body}`)
+      : console.log(error('No Note Found!'));
   }
 });
 
