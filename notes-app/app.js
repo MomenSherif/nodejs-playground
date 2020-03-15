@@ -1,8 +1,9 @@
 const chalk = require('chalk');
 const yargs = require('yargs');
-const getNotes = require('./notes');
+const { getNotes, addNote, removeNote } = require('./notes');
 
 const error = chalk.red;
+const success = chalk.green;
 
 // Customize yargs version
 yargs.version('1.1.0');
@@ -25,7 +26,10 @@ yargs.command({
     }
   },
   handler: function({ title, body }) {
-    console.log(chalk.keyword('orange')(`Title: ${title}\nBody ${body}`));
+    const isNoteAdded = addNote(title, body);
+    isNoteAdded
+      ? console.log(success('Note Added Successfully'))
+      : console.log(error('Note Title Taken!'));
   }
 });
 
@@ -33,8 +37,18 @@ yargs.command({
 yargs.command({
   command: 'remove',
   describe: 'Remove a note',
-  handler: function(args) {
-    console.log(chalk.keyword('orange')('Removing note...'));
+  builder: {
+    title: {
+      describe: 'Note title',
+      demandOption: true,
+      type: 'string'
+    }
+  },
+  handler: function({ title }) {
+    const isRemoved = removeNote(title);
+    isRemoved
+      ? console.log(success('Note Removed Successfully'))
+      : console.log(error('No Note Found!'));
   }
 });
 
