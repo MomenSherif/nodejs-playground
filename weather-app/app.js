@@ -1,8 +1,17 @@
-const fetch = require('node-fetch');
+const chalk = require('chalk');
+const getWeather = require('./utils/weather');
 
-const url =
-  'https://api.darksky.net/forecast/86e61a35dbdacf7a30c5092a5569b9f0/37.8267,-122.4233';
+const address = process.argv[2];
 
-fetch(url)
-  .then(res => res.json())
-  .then(data => console.log(data.currently));
+if (address) {
+  getWeather(address).then(
+    ({ location, summary, temperature, precipProbability }) => {
+      console.log(
+        chalk.green(`Temp: ${temperature}, It's ${precipProbability}% to rain`)
+      );
+      console.log(chalk.keyword('orange')(`${location} is ${summary}`));
+    }
+  );
+} else {
+  console.log(chalk.red('Enter an address!'));
+}
