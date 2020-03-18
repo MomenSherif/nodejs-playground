@@ -13,6 +13,21 @@
 <body>
   {{>header}}
   <div class="container">
+
+    <h1 class="display-4">Use this site to get weather</h1>
+    <form class="form-inline mt-3">
+      <div class="form-group mb-2 mr-4">
+        <label for="location" class="sr-only">Location</label>
+        <input type="text" class="form-control" id="location" placeholder="Location">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Search</button>
+    </form>
+    <div id="search-result"></div>
+  </div>
+  {{>footer}}
+
+
+
     <img src="img/js.png" alt="Node.js" />
   </div>
   {{>footer}}

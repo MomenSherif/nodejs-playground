@@ -2,6 +2,10 @@ const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
 
+
+const getWeather = require('./utils/weather');
+
+
 const app = express();
 const port = 3000;
 
@@ -41,6 +45,24 @@ app.get('/help', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
+  if (!req.query.address) {
+    // can not send multiple response so return from function
+    return res.send({
+      error: 'Must provide an address'
+    });
+  }
+
+  getWeather(req.query.address)
+    .then(data => {
+      res.send({
+        ...data,
+        address: req.query.address
+      });
+    })
+    .catch(err => {
+      res.send({ error: 'Invalid Address' });
+    });
+
   res.send({
     location: 'Cairo',
     forecast: 18
