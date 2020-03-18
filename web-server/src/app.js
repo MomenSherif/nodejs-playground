@@ -2,6 +2,8 @@ const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
 
+const getWeather = require('./utils/weather');
+
 const app = express();
 const port = 3000;
 
@@ -48,11 +50,16 @@ app.get('/weather', (req, res) => {
     });
   }
 
-  res.send({
-    location: 'Cairo',
-    forecast: 18,
-    address: req.query.address
-  });
+  getWeather(req.query.address)
+    .then(data => {
+      res.send({
+        ...data,
+        address: req.query.address
+      });
+    })
+    .catch(err => {
+      res.send({ error: 'Invalid Address' });
+    });
 });
 
 app.get('/help/*', (req, res) => {
