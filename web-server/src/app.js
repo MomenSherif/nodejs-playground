@@ -41,9 +41,17 @@ app.get('/help', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
+  if (!req.query.address) {
+    // can not send multiple response so return from function
+    return res.send({
+      error: 'Must provide an address'
+    });
+  }
+
   res.send({
     location: 'Cairo',
-    forecast: 18
+    forecast: 18,
+    address: req.query.address
   });
 });
 
