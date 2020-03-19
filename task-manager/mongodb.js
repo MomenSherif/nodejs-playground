@@ -10,37 +10,30 @@ MongoClient.connect(connectionURL, (err, client) => {
 
   const db = client.db(dbName);
 
-  db.collection('users').findOne({ name: `Mo'men` }, (err, user) => {
-    if (err) return console.log('Unable to fetch');
+  // db.collection('users')
+  //   .updateOne(
+  //     {
+  //       _id: new ObjectID('5e735d22a3c39c0df47dbdbf')
+  //     },
+  //     {
+  //       $set: {
+  //         name: 'Hamada'
+  //       }
+  //     }
+  //   )
+  //   .then(result => console.log(result))
+  //   .catch(err => console.log(err));
 
-    console.log(user);
-  });
-
-  db.collection('users')
-    .find({ age: 23 })
-    .toArray((err, users) => {
-      if (err) return console.log('Unable to fetch');
-
-      console.log(users);
-    });
-
-  // db.collection('tasks').findOne(
-  //   {
-  //     _id: new ObjectID('5e7365b463a24a45e48c308f')
-  //   },
-  //   (err, task) => {
-  //     if (err) return console.log('Unable to fetch');
-
-  //     console.log(task);
-  //   }
-  // );
-
-  // db.collection('tasks')
-  //   .find({ completed: false })
-  //   .toArray((err, tasks) => {
-  //     if (err) return console.log('Unable to fetch');
-
-  //     console.log(tasks);
-  //   });
+  db.collection('tasks')
+    .updateMany(
+      { completed: false },
+      {
+        $set: {
+          completed: true
+        }
+      }
+    )
+    .then(result => console.log(result))
+    .catch(err => console.log(err));
   client.close();
 });
