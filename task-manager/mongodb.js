@@ -1,8 +1,11 @@
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient, ObjectID } = require('mongodb');
 const assert = require('assert');
 
 const connectionURL = 'mongodb://127.0.0.1:27017';
 const dbName = 'task-manager';
+
+const id = new ObjectID();
+console.log(id);
 
 MongoClient.connect(connectionURL, (err, client) => {
   assert.equal(null, err);
@@ -40,25 +43,25 @@ MongoClient.connect(connectionURL, (err, client) => {
   //   }
   // );
 
-  db.collection('tasks').insertMany(
-    [
-      {
-        description: 'Task 1',
-        completed: false
-      },
-      {
-        description: 'Task 2',
-        completed: true
-      },
-      {
-        description: 'Task 3',
-        completed: false
-      }
-    ],
-    (err, result) => {
-      assert.equal(err, null);
+  // db.collection('tasks').insertMany(
+  //   [
+  //     {
+  //       description: 'Task 1',
+  //       completed: false
+  //     },
+  //     {
+  //       description: 'Task 2',
+  //       completed: true
+  //     },
+  //     {
+  //       description: 'Task 3',
+  //       completed: false
+  //     }
+  //   ],
+  //   (err, result) => {
+  //     assert.equal(err, null);
 
-      console.log(result.ops);
-    }
-  );
+  //     console.log(result.ops);
+  //   }
+  // );
 });
