@@ -2,12 +2,10 @@ const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
 
-
 const getWeather = require('./utils/weather');
 
-
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public');
