@@ -4,64 +4,43 @@ const assert = require('assert');
 const connectionURL = 'mongodb://127.0.0.1:27017';
 const dbName = 'task-manager';
 
-const id = new ObjectID();
-console.log(id);
-
 MongoClient.connect(connectionURL, (err, client) => {
   assert.equal(null, err);
   console.log('Connected successfully to server');
 
   const db = client.db(dbName);
 
-  // db.collection('users').insertOne(
+  db.collection('users').findOne({ name: `Mo'men` }, (err, user) => {
+    if (err) return console.log('Unable to fetch');
+
+    console.log(user);
+  });
+
+  db.collection('users')
+    .find({ age: 23 })
+    .toArray((err, users) => {
+      if (err) return console.log('Unable to fetch');
+
+      console.log(users);
+    });
+
+  // db.collection('tasks').findOne(
   //   {
-  //     name: `Mo'men`,
-  //     age: 23
+  //     _id: new ObjectID('5e7365b463a24a45e48c308f')
   //   },
-  //   (err, result) => {
-  //     assert.equal(err, null);
+  //   (err, task) => {
+  //     if (err) return console.log('Unable to fetch');
 
-  //     console.log(result.ops);
+  //     console.log(task);
   //   }
   // );
 
-  // db.collection('users').insertMany(
-  //   [
-  //     {
-  //       name: 'Amr',
-  //       age: 23
-  //     },
-  //     {
-  //       name: 'Menna',
-  //       age: 22
-  //     }
-  //   ],
-  //   (err, result) => {
-  //     assert.equal(err, null);
+  // db.collection('tasks')
+  //   .find({ completed: false })
+  //   .toArray((err, tasks) => {
+  //     if (err) return console.log('Unable to fetch');
 
-  //     console.log(result.ops);
-  //   }
-  // );
-
-  // db.collection('tasks').insertMany(
-  //   [
-  //     {
-  //       description: 'Task 1',
-  //       completed: false
-  //     },
-  //     {
-  //       description: 'Task 2',
-  //       completed: true
-  //     },
-  //     {
-  //       description: 'Task 3',
-  //       completed: false
-  //     }
-  //   ],
-  //   (err, result) => {
-  //     assert.equal(err, null);
-
-  //     console.log(result.ops);
-  //   }
-  // );
+  //     console.log(tasks);
+  //   });
+  client.close();
 });
