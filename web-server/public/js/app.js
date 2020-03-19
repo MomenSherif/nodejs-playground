@@ -8,6 +8,7 @@ form.addEventListener('submit', e => {
   locationInput.value = '';
   searchResultEl.textContent = 'Loading...';
 
+
   fetch(`/weather?address=${location}`)
     .then(res => res.json())
     .then(({ error, ...data }) => {
