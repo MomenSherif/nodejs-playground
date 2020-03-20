@@ -25,7 +25,18 @@ const User = mongoose.model('User', {
       message: props => `${props.value} is not valid email!`
     }
   },
-
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 7,
+    validate: {
+      validator(v) {
+        return !v.match(/\bpassword\b/gi);
+      },
+      message: props => `Password can not contain password`
+    }
+  },
   age: {
     type: Number,
     default: 16,
@@ -38,32 +49,35 @@ const User = mongoose.model('User', {
   }
 });
 
-const me = new User({
-  name: 'Momen',
-  email: 'momensherif.2019@gmail.com',
-  age: 23
-});
-
-me.save()
-  .then(() => console.log(me))
-  .catch(error => console.log(error.message));
-
-// Define Task Modle
-// const Task = mongoose.model('Task', {
-//   description: {
-//     type: String
-//   },
-//   completed: {
-//     type: Boolean
-//   }
+// const me = new User({
+//   name: 'Momen',
+//   email: 'momensherif.2019@gmail.com',
+//   password: '1234567',
+//   age: 23
 // });
 
+// me.save()
+//   .then(() => console.log(me))
+//   .catch(error => console.log(error.message));
+
+// Define Task Model
+const Task = mongoose.model('Task', {
+  description: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  }
+});
+
 // const newTask = new Task({
-//   description: 'A mongoose task',
-//   completed: false
+//   description: 'Task 20/3/2020'
 // });
 
 // newTask
 //   .save()
 //   .then(() => console.log(newTask))
-//   .catch(err => console.log(err));
+//   .catch(err => console.log(err.message));
