@@ -62,6 +62,16 @@ app.patch('/users/:id', async (req, res) => {
   }
 });
 
+// Delete User EndPoint
+app.delete('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    user ? res.send(user) : res.sendStatus(404);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
 // Create Task EndPoint
 app.post('/tasks', async (req, res) => {
   const task = new Task(req.body);
@@ -113,6 +123,16 @@ app.patch('/tasks/:id', async (req, res) => {
     task ? res.send(task) : res.sendStatus(404);
   } catch (e) {
     res.status(400).send(e);
+  }
+});
+
+// Delete Task EndPoint
+app.delete('/tasks/:id', async (req, res) => {
+  try {
+    const task = await Task.findByIdAndDelete(req.params.id);
+    task ? res.send(task) : res.sendStatus(404);
+  } catch (e) {
+    res.sendStatus(500);
   }
 });
 
