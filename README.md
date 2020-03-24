@@ -10,3 +10,4 @@
 4.  web-servers
 5.  accessing-api-from-browser
 6.  mongodb-and-promises
+7.  rest-apis-and-mongoose
