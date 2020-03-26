@@ -30,6 +30,32 @@ router.post('/users/login', async (req, res) => {
   }
 });
 
+// Logout User EndPoint
+router.post('/users/logout', auth, async (req, res) => {
+  try {
+    // remove auth token
+    req.user.tokens = req.user.tokens.filter(
+      ({ token }) => token !== req.token
+    );
+    await req.user.save();
+
+    res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
+// Logout User of all sessions
+router.post('/users/logoutAll', auth, async (req, res) => {
+  try {
+    req.user.tokens = [];
+    await req.user.save();
+    res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
 // Read User Profile when authenticated EndPoint
 router.get('/users/me', auth, async (req, res) => {
   res.send(req.user);
