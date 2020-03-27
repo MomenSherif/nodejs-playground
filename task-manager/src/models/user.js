@@ -118,8 +118,4 @@ userSchema.pre('remove', async function(next) {
 // Define User Model
 const User = mongoose.model('User', userSchema);
 
-  }
-});
-
-
 module.exports = User;
