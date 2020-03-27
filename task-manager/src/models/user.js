@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -13,7 +14,9 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+
     unique: true,
+
     required: true,
     trim: true,
     lowercase: true,
@@ -114,5 +117,9 @@ userSchema.pre('remove', async function(next) {
 
 // Define User Model
 const User = mongoose.model('User', userSchema);
+
+  }
+});
+
 
 module.exports = User;
