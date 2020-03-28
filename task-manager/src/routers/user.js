@@ -1,8 +1,12 @@
 const express = require('express');
+const multer = require('multer');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
+const upload = multer({
+  dest: 'avatars'
+});
 
 // Create User EndPoint
 router.post('/users', async (req, res) => {
@@ -12,12 +16,10 @@ router.post('/users', async (req, res) => {
 
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
-
   } catch (e) {
     res.status(400).send(e);
   }
 });
-
 
 // Login User EndPoint
 router.post('/users/login', async (req, res) => {
@@ -43,7 +45,6 @@ router.post('/users/logout', auth, async (req, res) => {
     await req.user.save();
 
     res.sendStatus(200);
-
   } catch (e) {
     res.sendStatus(500);
   }
@@ -55,12 +56,10 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     req.user.tokens = [];
     await req.user.save();
     res.sendStatus(200);
-
   } catch (e) {
     res.sendStatus(500);
   }
 });
-
 
 // Read User Profile when authenticated EndPoint
 router.get('/users/me', auth, async (req, res) => {
@@ -82,22 +81,23 @@ router.patch('/users/me', auth, async (req, res) => {
     updates.forEach(update => (req.user[update] = req.body[update]));
     await req.user.save();
     res.send({ user: req.user });
-
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
 // Delete User EndPoint
-
 router.delete('/users/me', auth, async (req, res) => {
   try {
     await req.user.remove();
     res.send(req.user);
-
   } catch (e) {
     res.sendStatus(500);
   }
+});
+
+router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+  res.sendStatus(200);
 });
 
 module.exports = router;
