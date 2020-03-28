@@ -9,7 +9,7 @@ const upload = multer({
     fileSize: 1000000
   },
   fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png})$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
       return cb(new Error('Please upload an image'));
     }
 
@@ -125,6 +125,17 @@ router.delete('/users/me/avatar', auth, async (req, res) => {
   req.user.avatar = undefined;
   await req.user.save();
   res.sendStatus(200);
+});
+
+router.get('/users/:id/avatar', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user || !user.avatar) throw new Error();
+
+    res.set('Content-Type', 'image/jpg').send(user.avatar);
+  } catch (e) {
+    res.sendStatus(404);
+  }
 });
 
 module.exports = router;
