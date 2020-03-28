@@ -50,6 +50,9 @@ const userSchema = new mongoose.Schema(
         message: props => `${props.value} is to Young `
       }
     },
+    avatar: {
+      type: Buffer
+    },
     tokens: [
       {
         token: {
