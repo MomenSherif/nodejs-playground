@@ -6,58 +6,64 @@ const jwt = require('jsonwebtoken');
 
 const Task = require('./task');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: String,
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    email: {
+      type: String,
 
-    unique: true,
+      unique: true,
 
-    required: true,
-    trim: true,
-    lowercase: true,
-    validate: {
-      validator(v) {
-        return validator.isEmail(v);
-      },
-      message: props => `${props.value} is not valid email!`
-    }
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 7,
-    validate: {
-      validator(v) {
-        return !v.match(/\bpassword\b/gi);
-      },
-      message: props => `Password can not contain password`
-    }
-  },
-  age: {
-    type: Number,
-    default: 16,
-    validate: {
-      validator(v) {
-        return v >= 16;
-      },
-      message: props => `${props.value} is to Young `
-    }
-  },
-  tokens: [
-    {
-      token: {
-        type: 'string',
-        required: true
+      required: true,
+      trim: true,
+      lowercase: true,
+      validate: {
+        validator(v) {
+          return validator.isEmail(v);
+        },
+        message: props => `${props.value} is not valid email!`
       }
-    }
-  ]
-});
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 7,
+      validate: {
+        validator(v) {
+          return !v.match(/\bpassword\b/gi);
+        },
+        message: props => `Password can not contain password`
+      }
+    },
+    age: {
+      type: Number,
+      default: 16,
+      validate: {
+        validator(v) {
+          return v >= 16;
+        },
+        message: props => `${props.value} is to Young `
+      }
+    },
+    avatar: {
+      type: Buffer
+    },
+    tokens: [
+      {
+        token: {
+          type: 'string',
+          required: true
+        }
+      }
+    ]
+  },
+  { timestamps: true }
+);
 
 userSchema.virtual('tasks', {
   ref: 'Task',
@@ -82,6 +88,7 @@ userSchema.methods.toJSON = function() {
   const userObject = user.toObject();
   delete userObject.password;
   delete userObject.tokens;
+  delete userObject.avatar;
 
   return userObject;
 };
