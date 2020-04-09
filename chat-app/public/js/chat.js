@@ -7,11 +7,16 @@ const $messageFormButton = $messageForm.querySelector('button');
 const $sendLocationButton = document.getElementById('send-location');
 const $messages = document.getElementById('messages');
 
-socket.on('message', ({ text, createdAt }) => {
+// Options
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
+socket.on('message', ({ username, text, createdAt }) => {
   const html = `
     <div class="message">
       <p>
-        <span class="message__name">User</span>
+        <span class="message__name">${username}</span>
         <span class="message__meta">${moment(createdAt).format('h:mm a')}</span>
       </p>
       <p>${text}</p>
@@ -20,14 +25,14 @@ socket.on('message', ({ text, createdAt }) => {
   $messages.insertAdjacentHTML('beforeend', html);
 });
 
-socket.on('locationMessage', ({ url, createdAt }) => {
+socket.on('locationMessage', ({ username, url, createdAt }) => {
   const html = `
     <div>
       <p>
-        <span class="message__name">User</span>
+        <span class="message__name">${username}</span>
         <span class="message__meta">${moment(createdAt).format('h:mm a')}</span>
       </p>
-     <a href=${url} target="_blank">My curretn location</a>
+     <a href=${url} target="_blank">My current location</a>
     </div>
   `;
   $messages.insertAdjacentHTML('beforeend', html);
@@ -59,4 +64,11 @@ $sendLocationButton.addEventListener('click', (e) => {
       $sendLocationButton.disabled = false;
     });
   });
+});
+
+socket.emit('join', { username, room }, (error) => {
+  if (error) {
+    alert(error);
+    location.href = '/';
+  }
 });
