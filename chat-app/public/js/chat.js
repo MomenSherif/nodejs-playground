@@ -7,19 +7,20 @@ const $messageFormButton = $messageForm.querySelector('button');
 const $sendLocationButton = document.getElementById('send-location');
 const $messages = document.getElementById('messages');
 
-socket.on('message', ({ message }) => {
+socket.on('message', ({ text, createdAt }) => {
   const html = `
     <div>
-      <p>${message}</p>
+      <p>${moment(createdAt).format('h:mm a')} - ${text}</p>
     </div>
   `;
   $messages.insertAdjacentHTML('beforeend', html);
 });
 
-socket.on('locationMessage', ({ url }) => {
+socket.on('locationMessage', ({ url, createdAt }) => {
   const html = `
     <div>
-      <a href=${location} target="_blank">This is my location</a>
+     <span>${moment(createdAt).format('h:mm a')}</span>
+      - <a href=${url} target="_blank">This is my location</a>
     </div>
   `;
   $messages.insertAdjacentHTML('beforeend', html);
