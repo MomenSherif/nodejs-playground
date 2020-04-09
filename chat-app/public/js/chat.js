@@ -9,8 +9,12 @@ const $messages = document.getElementById('messages');
 
 socket.on('message', ({ text, createdAt }) => {
   const html = `
-    <div>
-      <p>${moment(createdAt).format('h:mm a')} - ${text}</p>
+    <div class="message">
+      <p>
+        <span class="message__name">User</span>
+        <span class="message__meta">${moment(createdAt).format('h:mm a')}</span>
+      </p>
+      <p>${text}</p>
     </div>
   `;
   $messages.insertAdjacentHTML('beforeend', html);
@@ -19,8 +23,11 @@ socket.on('message', ({ text, createdAt }) => {
 socket.on('locationMessage', ({ url, createdAt }) => {
   const html = `
     <div>
-     <span>${moment(createdAt).format('h:mm a')}</span>
-      - <a href=${url} target="_blank">This is my location</a>
+      <p>
+        <span class="message__name">User</span>
+        <span class="message__meta">${moment(createdAt).format('h:mm a')}</span>
+      </p>
+     <a href=${url} target="_blank">My curretn location</a>
     </div>
   `;
   $messages.insertAdjacentHTML('beforeend', html);
