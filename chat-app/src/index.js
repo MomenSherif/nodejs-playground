@@ -11,10 +11,11 @@ const io = socketio(server);
 const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, '../public')));
 
-let count = 1;
-
 io.on('connection', (socket) => {
-  socket.emit('message', { message: 'Welcome! ' });
+  socket.emit('message', {
+    message: 'Welcome!',
+    createdAt: new Date().getTime(),
+  });
   socket.broadcast.emit('message', { message: 'New user has joined!' });
 
   socket.on('sendMessage', ({ message }, callback) => {
@@ -28,8 +29,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('sendLocation', ({ latitude, longitude }, callback) => {
-    io.emit('message', {
-      message: `https://google.com/maps?q=${latitude},${longitude}`,
+    io.emit('locationMessage', {
+      url: `https://google.com/maps?q=${latitude},${longitude}`,
     });
 
     callback();
