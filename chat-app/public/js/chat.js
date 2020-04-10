@@ -6,11 +6,34 @@ const $messageFormInput = $messageForm.message;
 const $messageFormButton = $messageForm.querySelector('button');
 const $sendLocationButton = document.getElementById('send-location');
 const $messages = document.getElementById('messages');
+const $sidebar = document.getElementById('sidebar');
 
 // Options
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
+
+const autoScroll = () => {
+  // New message
+  const $newMessage = $messages.lastElementChild;
+
+  // Height of the new message
+  const newMessageMargin = parseInt(getComputedStyle($newMessage).marginBottom);
+  const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
+
+  // Visible height
+  const visibleHeight = $messages.offsetHeight;
+
+  // Height of messages container
+  const containerHeight = $messages.scrollHeight;
+
+  // ScrollOffset
+  const scrollOffset = $messages.scrollTop + visibleHeight;
+
+  if (containerHeight - newMessageHeight <= scrollOffset) {
+    $messages.scrollTop = $messages.scrollHeight;
+  }
+};
 
 socket.on('message', ({ username, text, createdAt }) => {
   const html = `
@@ -23,6 +46,7 @@ socket.on('message', ({ username, text, createdAt }) => {
     </div>
   `;
   $messages.insertAdjacentHTML('beforeend', html);
+  autoScroll();
 });
 
 socket.on('locationMessage', ({ username, url, createdAt }) => {
@@ -36,6 +60,18 @@ socket.on('locationMessage', ({ username, url, createdAt }) => {
     </div>
   `;
   $messages.insertAdjacentHTML('beforeend', html);
+  autoScroll();
+});
+
+socket.on('roomData', ({ room, users }) => {
+  const html = `
+    <h2 class="room-title">${room}</h2>
+    <h3 class="list-title">Users</h3>
+    <ul class="users">
+      ${users.map((user) => `<li>${user.username}</li>`).join('')}
+    </ul>
+  `;
+  $sidebar.innerHTML = html;
 });
 
 $messageForm.addEventListener('submit', (e) => {
